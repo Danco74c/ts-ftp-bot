@@ -1,7 +1,7 @@
 from validate_email import validate_email
 from exceptions import FTPIncorrectSyntax
 import re
-import config
+from conf import config
 
 
 # parse message

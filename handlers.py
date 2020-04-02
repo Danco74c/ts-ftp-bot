@@ -2,7 +2,7 @@ from operations import create_ftp_folder, send_email, pass_gen
 from exceptions import FTPIncorrectSyntax
 from validation import validate_create
 from threading import Thread
-import config
+from conf import config
 import requests
 import json
 
