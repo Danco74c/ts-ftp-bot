@@ -1,2 +1,2 @@
-# ts-ftp-bot
+# TeraSky SFTP BOT
 TBD
