@@ -1,18 +1,18 @@
 #!/bin/bash
   
-COMPANY=$1
-PASSWORD=$2
+FOLDER=$1
+USER=$2
+PASSWORD=$3
 ENCRYPTED=$(openssl passwd $PASSWORD)
 
-if [ `sudo /bin/egrep  -i "^${COMPANY}:" /etc/passwd` ]; then
-        echo "User $COMPANY exists in /etc/passwd" >> /home/FTPscript/user.txt
+if [ `sudo /bin/egrep  -i "^${USER}:" /etc/passwd` ]; then
+        echo "User $USER exists in /etc/passwd" >> /home/FTPscript/user.txt
 else
-        echo "User $COMPANY now added to /etc/passwd" >> /home/FTPscript/user.txt
+        echo "User $FOLDER now added to /etc/passwd" >> /home/FTPscript/user.txt
 	
-        sudo useradd -d /home/FTPserver/$COMPANY/ -m $COMPANY -p $ENCRYPTED
-        sudo mkdir -p /home/FTPserver/$COMPANY
-        sudo chown -R $COMPANY:$COMPANY /home/FTPserver/$COMPANY
-        sudo chmod 770 /home/FTPserver/$COMPANY
-        echo -e "${PASSWORD}\n${PASSWORD}" | passwd $COMPANY
-        echo Username: $COMPANY and Password: $PASSWORD >> /home/FTPscript/pass.txt
+        sudo mkdir -p /home/FTPserver/$FOLDER
+        sudo useradd -d /home/FTPserver/$FOLDER/ -m $USER -p $ENCRYPTED
+        sudo chown -R $USER:$USER /home/FTPserver/$FOLDER
+        sudo chmod 755 /home/FTPserver/$FOLDER
+        echo -e "${PASSWORD}\n${PASSWORD}" | passwd $USER
 fi

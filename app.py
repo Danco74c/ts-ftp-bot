@@ -1,6 +1,8 @@
+from exceptions import *
+from conf import config
 from flask import Flask, Response, request
 from handlers import command_handler
-from exceptions import FTPIncorrectSyntax
+
 
 
 app = Flask(__name__)
@@ -16,6 +18,9 @@ def commands():
         responseStr = command_handler(request.form.get('text',None),response_url)
     except FTPIncorrectSyntax as e:
         responseStr = e.message
+    except FolderAlreadyExists as e:
+        responseStr = e.message
+  
     
     response = Response(responseStr, status=200, mimetype='application/json')
     return response
