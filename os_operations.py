@@ -12,10 +12,10 @@ from conf import config
 def create_user(name, password, home_folder):
     
     #check if FTP group exists
-    out = os.system("getent group " + config.FTP_GROUP_NAME)
+    out = os.system("sudo getent group " + config.FTP_GROUP_NAME)
     if out != 0:
         #create the ftp group
-        os.system("groupadd -g " + config.FTP_GROUP_ID + " " + config.FTP_GROUP_NAME)
+        os.system("sudo groupadd -g " + config.FTP_GROUP_ID + " " + config.FTP_GROUP_NAME)
 
     #check if user already exists
     out = os.system("id -u " + name)
@@ -25,15 +25,14 @@ def create_user(name, password, home_folder):
     encPass = crypt.crypt(password,"22")
 
     #create user
-    print("useradd -p " + encPass +  " -d " + config.FOLDERS_PATH + home_folder + " " + name)
-    os.system("useradd -p " + encPass +  " -d " + config.FOLDERS_PATH + home_folder + " " + name)
+    os.system("sudo useradd -p " + encPass +  " -d " + config.FOLDERS_PATH + home_folder + " " + name + " -g " + config.FTP_GROUP_NAME)
     return pwd.getpwnam(name)
 
 
 #delete user
 def delete_user(name):
     #delete user
-    os.system("userdel -r " + name)
+    os.system("sudo userdel -r " + name)
 
 
 #create new folder
@@ -42,7 +41,10 @@ def create_folder(folder_path):
     #create folder if not already exists
     if not os.path.exists(folder_path):
         os.mkdir(folder_path)
-        os.chmod(folder_path, config.OWNER_ONLY_PERMISSION)
+        os.chmod(folder_path, config.FOLDER_PERMISSION)
+        #create uploads folder
+        os.mkdir(folder_path + config.UPLOAD_FOLDER_NAME)
+        os.chmod(folder_path, config.UPLOAD_FOLDER_NAME)
 
     else:
         raise FolderAlreadyExists(config.EXCP_MSG_FOLDER_EXSIST)
@@ -81,7 +83,7 @@ def set_folder_owner(folder_path, owner):
     #check if folder exist
     if not os.path.exists(folder_path):
         raise FolderNotExist(config.EXCP_MSG_FOLDER_NOT_EXSIST)
-
+    print("folder:" + folder_path + " uid: " + str(uid) + " gid: " + str(gid))
     os.chown(folder_path, uid, gid)
 
     

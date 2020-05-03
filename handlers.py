@@ -53,8 +53,9 @@ def ftp_create_handler(folder, email):
     #create user
     os_operations.create_user(username, password, folder)
 
-    #set owner
-    os_operations.set_folder_owner(config.FOLDERS_PATH + folder, username)
+    #set uploads owner
+    user_uploads_folder = config.FOLDERS_PATH + folder + "/" + config.UPLOAD_FOLDER_NAME
+    os_operations.set_folder_owner(user_uploads_folder, username)
     
 
     #SEND EMAIL
